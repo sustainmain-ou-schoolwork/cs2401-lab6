@@ -12,6 +12,7 @@
 *************************************************************************/
 
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <ctime>
 using namespace std;
@@ -31,12 +32,12 @@ int size(const node *head);
 //instructions page.
 
 void remove_repeats(node *&head);
-//void split_list(const node* original, node*& lesser, node*& greater, int split_value);
+void split_list(const node* original, node*& lesser, node*& greater, int split_value);
 
 int main()
 {
     int start, stop;
-    int split;
+    int split = 250;
     node *head = NULL;
     node *lesser;
     node *greater;
@@ -59,6 +60,15 @@ int main()
     cout << "Time to print list = " << stop - start << " seconds.\n";
     cout << "Size of the list = " << size(head) << '\n' << endl;
 
+
+    start = time(NULL);
+    split_list(head, lesser, greater, split);
+    show_list(lesser);
+    show_list(greater);
+    stop = time(NULL);
+    cout << "Time to print list = " << stop - start << " seconds.\n";
+    cout << "Size of the list = " << size(head) << '\n' << endl;
+
     return 0;
 }
 
@@ -66,7 +76,7 @@ int main()
 void build_list(node *&head)
 {
     const int HIGHEST_INT = 500;
-    const int NUMBER_OF_INTS = 2000;
+    const int NUMBER_OF_INTS = 7;
 
     node *cursor;
 
@@ -87,8 +97,17 @@ void show_list(const node *head)
 {
     const node *cursor = head;
 
+    int i = 0;
     while (cursor != NULL) {
-        cout << cursor -> data << "  ";
+        cout << setw(4) << cursor -> data;
+        if (i >= 30) {
+            cout << endl;
+            i = 0;
+        }
+        else {
+            i++;
+        }
+
         cursor = cursor->next;
     }
     cout << endl;
@@ -106,7 +125,11 @@ int size(const node *head)
     return count;
 }
 
-
+/**
+ * @brief Removes any duplicate ints in a linked list, saving the first appearance of any given number.
+ * 
+ * @param head the head of the linked list
+ */
 void remove_repeats(node *&head) {
     node* majorNode = head;
 
@@ -132,5 +155,42 @@ void remove_repeats(node *&head) {
 
         // shift majorNode down the list
         majorNode = majorNode -> next;
+    }
+}
+
+/**
+ * @brief Puts each int in a linked list into one of two other linked lists, depending on a split value. 
+ * 
+ * @param original the head of the original linked list
+ * @param lesser the head of the linked list that will be filled with ints less than split_value
+ * @param greater the head of the linked list will be filled with ints greater than split_value
+ * @param split_value the value to compare each int inside original to
+ */
+void split_list(const node* original, node*& lesser, node*& greater, int split_value) {
+    const node* cursorOriginal = original;
+    node* cursorLesser = lesser;
+    node* cursorGreater = greater;
+
+    while (cursorOriginal != NULL) {
+        if (cursorOriginal -> data < split_value) {
+            node* tmp;
+            tmp = new node;
+            tmp -> data = cursorOriginal -> data;
+            tmp -> next = NULL;
+
+            cursorLesser = tmp;
+            cursorLesser = cursorLesser -> next;
+        }
+        else if (cursorOriginal -> data > split_value) {
+            node* tmp;
+            tmp = new node;
+            tmp -> data = cursorOriginal -> data;
+            tmp -> next = NULL;
+
+            cursorGreater = tmp;
+            cursorGreater = cursorGreater -> next;
+        }
+
+        cursorOriginal = cursorOriginal -> next;
     }
 }

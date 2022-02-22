@@ -7,7 +7,7 @@
     The prototypes for the functions that you are to implement are
     included. You should uncomment them when you are ready to write 
     the implementation.
-    John Dolan				Spring 2014
+    John Dolan                   Spring 2014
     Patricia Lindner             Fall 2021
 *************************************************************************/
 
@@ -30,7 +30,7 @@ int size(const node *head);
 //These are the two that you are to write, as described in the
 //instructions page.
 
-//void remove_repeats(node *&head);
+void remove_repeats(node *&head);
 //void split_list(const node* original, node*& lesser, node*& greater, int split_value);
 
 int main()
@@ -52,22 +52,28 @@ int main()
     cout << "Time to print list = " << stop - start << "seconds.\n";
     cout << "Size of the list = " << size(head) << endl;
 
+    remove_repeats(head);
+    show_list(head);
+
     return 0;
 }
 
 // builds a linked list of 2000 random integers, all in the range 1 - 500
 void build_list(node *&head)
 {
+    const int HIGHEST_INT = 500;
+    const int NUMBER_OF_INTS = 2000;
+
     node *cursor;
 
     head = new node;
-    head -> data = rand() % 500 + 1;
+    head -> data = rand() % HIGHEST_INT + 1;
 
     cursor = head;
-    for (int i = 0; i < 2000; ++i) {
+    for (int i = 0; i < (NUMBER_OF_INTS - 1); ++i) {
         cursor -> next = new node;
         cursor = cursor -> next;
-        cursor -> data = rand() % 500 + 1;
+        cursor -> data = rand() % HIGHEST_INT + 1;
     }
     cursor -> next = NULL;
 }
@@ -91,7 +97,34 @@ int size(const node *head)
     int count = 0;
     while (cursor != NULL) {
         count++;
-        cursor = cursor->next;
+        cursor = cursor -> next;
     }
     return count;
+}
+
+
+void remove_repeats(node *&head) {
+    node* majorNode = head;
+
+    while (majorNode != NULL) {
+        node* cursor = majorNode -> next;
+        node* previous = majorNode;
+        while (cursor != NULL) {
+            if (cursor -> data == majorNode -> data) {
+                // remove the node pointed to by cursor
+                node* tmp;
+                tmp = cursor -> next;
+                previous -> next = tmp;
+                delete cursor;
+
+                cursor = tmp;
+            }
+            else {
+                previous = cursor;
+                cursor = cursor -> next;
+            }
+        }
+
+        majorNode = majorNode -> next;
+    }
 }

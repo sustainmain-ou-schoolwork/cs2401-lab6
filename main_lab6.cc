@@ -124,11 +124,13 @@ void remove_repeats(node *&head) {
                 cursor = tmp;
             }
             else {
+                // shift previous and cursor down the list
                 previous = cursor;
                 cursor = cursor -> next;
             }
         }
 
+        // shift majorNode down the list
         majorNode = majorNode -> next;
     }
 }

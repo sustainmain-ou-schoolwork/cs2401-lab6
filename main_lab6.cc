@@ -44,16 +44,20 @@ int main()
     start = time(NULL);
     build_list(head);
     stop = time(NULL);
-    cout << "Time to build list = " << stop - start << "seconds.\n";
+    cout << "Time to build list = " << stop - start << " seconds.\n" << endl;
 
     start = time(NULL);
     show_list(head);
     stop = time(NULL);
-    cout << "Time to print list = " << stop - start << "seconds.\n";
-    cout << "Size of the list = " << size(head) << endl;
+    cout << "Time to print list = " << stop - start << " seconds.\n";
+    cout << "Size of the list = " << size(head) << '\n' << endl;
 
+    start = time(NULL);
     remove_repeats(head);
     show_list(head);
+    stop = time(NULL);
+    cout << "Time to print list = " << stop - start << " seconds.\n";
+    cout << "Size of the list = " << size(head) << '\n' << endl;
 
     return 0;
 }

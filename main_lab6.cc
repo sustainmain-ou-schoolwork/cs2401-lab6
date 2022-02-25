@@ -184,7 +184,10 @@ void split_list(const node* original, node*& lesser, node*& greater, int split_v
     node* cursorGreater = greater;
 
     while (cursorOriginal != NULL) {
+        // if the current node is less than the split value, put it in lesser
+        // if the current node is greater than the split value, put it in greater
         if (cursorOriginal -> data < split_value) {
+            // make a new node
             if (lesser == NULL) {
                 lesser = new node;
                 cursorLesser = lesser;
@@ -194,11 +197,12 @@ void split_list(const node* original, node*& lesser, node*& greater, int split_v
                 cursorLesser = cursorLesser -> next;
             }
 
+            // set the values of the node
             cursorLesser -> data = cursorOriginal -> data;
-
             cursorLesser -> next = NULL;
         }
         else if (cursorOriginal -> data > split_value) {
+            // make a new node
             if (greater == NULL) {
                 greater = new node;
                 cursorGreater = greater;
@@ -208,11 +212,12 @@ void split_list(const node* original, node*& lesser, node*& greater, int split_v
                 cursorGreater = cursorGreater -> next;
             }
 
+            // set the values of the node
             cursorGreater -> data = cursorOriginal -> data;
-
             cursorGreater -> next = NULL;
         }
 
+        // point the cursor to the next node
         cursorOriginal = cursorOriginal -> next;
     }
 }

@@ -37,22 +37,25 @@ void split_list(const node* original, node*& lesser, node*& greater, int split_v
 int main()
 {
     int start, stop;
-    int split = 250;
+    int split;
     node *head = NULL;
-    node *lesser;
-    node *greater;
+    node *lesser = NULL;
+    node *greater = NULL;
 
+    // build list
     start = time(NULL);
     build_list(head);
     stop = time(NULL);
     cout << "Time to build list = " << stop - start << " seconds.\n" << endl;
 
+    // print list
     start = time(NULL);
     show_list(head);
     stop = time(NULL);
     cout << "Time to print list = " << stop - start << " seconds.\n";
     cout << "Size of the list = " << size(head) << '\n' << endl;
 
+    // remove repeats and print list
     start = time(NULL);
     remove_repeats(head);
     show_list(head);
@@ -60,14 +63,22 @@ int main()
     cout << "Time to print list = " << stop - start << " seconds.\n";
     cout << "Size of the list = " << size(head) << '\n' << endl;
 
+    // get split value
+    do {
+        cout << "Enter the split value, between 1 and 500: ";
+        cin >> split;
+    } while (!(split >= 1 && split <= 500));
 
+    // split list into lesser and greater and print them
     start = time(NULL);
     split_list(head, lesser, greater, split);
     show_list(lesser);
+    cout << '\n';
     show_list(greater);
     stop = time(NULL);
-    cout << "Time to print list = " << stop - start << " seconds.\n";
-    cout << "Size of the list = " << size(head) << '\n' << endl;
+    cout << "Time to print lists = " << stop - start << " seconds.\n";
+    cout << "Size of the lesser list = " << size(lesser) << '\n' << endl;
+    cout << "Size of the greater list = " << size(greater) << '\n' << endl;
 
     return 0;
 }
@@ -76,7 +87,7 @@ int main()
 void build_list(node *&head)
 {
     const int HIGHEST_INT = 500;
-    const int NUMBER_OF_INTS = 7;
+    const int NUMBER_OF_INTS = 2000;
 
     node *cursor;
 
@@ -95,12 +106,13 @@ void build_list(node *&head)
 // outputs the contents of a linked list to the screen
 void show_list(const node *head)
 {
+    const int INTS_PER_ROW = 20;
     const node *cursor = head;
 
     int i = 0;
     while (cursor != NULL) {
         cout << setw(4) << cursor -> data;
-        if (i >= 30) {
+        if (i >= INTS_PER_ROW) {
             cout << endl;
             i = 0;
         }
@@ -173,22 +185,32 @@ void split_list(const node* original, node*& lesser, node*& greater, int split_v
 
     while (cursorOriginal != NULL) {
         if (cursorOriginal -> data < split_value) {
-            node* tmp;
-            tmp = new node;
-            tmp -> data = cursorOriginal -> data;
-            tmp -> next = NULL;
+            if (lesser == NULL) {
+                lesser = new node;
+                cursorLesser = lesser;
+            }
+            else {
+                cursorLesser -> next = new node;
+                cursorLesser = cursorLesser -> next;
+            }
 
-            cursorLesser = tmp;
-            cursorLesser = cursorLesser -> next;
+            cursorLesser -> data = cursorOriginal -> data;
+
+            cursorLesser -> next = NULL;
         }
         else if (cursorOriginal -> data > split_value) {
-            node* tmp;
-            tmp = new node;
-            tmp -> data = cursorOriginal -> data;
-            tmp -> next = NULL;
+            if (greater == NULL) {
+                greater = new node;
+                cursorGreater = greater;
+            }
+            else {
+                cursorGreater -> next = new node;
+                cursorGreater = cursorGreater -> next;
+            }
 
-            cursorGreater = tmp;
-            cursorGreater = cursorGreater -> next;
+            cursorGreater -> data = cursorOriginal -> data;
+
+            cursorGreater -> next = NULL;
         }
 
         cursorOriginal = cursorOriginal -> next;
